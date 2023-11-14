@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Login</title>
+    <style>
+      body {
+        background-image: url("photos/isc1.png");
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      #login-container {
+        background-color: pink;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+        width: 250px; /* Adjusted width */
+      }
+
+      input {
+        display: block;
+        margin: 10px;
+        padding: 10px;
+        font-size: 16px;
+        width: 80%;
+      }
+
+      button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="login-container">
+      <h1>User Login</h1>
+
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+
+      <button onclick="userLogin()">Login</button>
+
+      <p>
+        Don't have an account? <a href="user_registration.html">Register</a>
+      </p>
+    </div>
+
+    <script>
+      function userLogin() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        fetch("/user_login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            alert(result.message); // Display the server response (for testing)
+            if (result.success) {
+              // Redirect or perform additional actions upon successful login
+              window.location.href = "/dashboard";
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+    </script>
+  </body>
+</html>

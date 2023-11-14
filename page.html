@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sports Complex Booking System</title>
+    <style>
+      body {
+        background-image: url("photos/snu_main_page.jpg");
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      #container {
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.409); /* Background color with transparency */
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      button {
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+      }
+
+      #quote-container {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <h1>Welcome to the Sports Complex Booking System</h1>
+
+      <button onclick="redirectTo('admin')">Admin</button>
+      <button onclick="redirectTo('user')">User</button>
+
+      <div id="quote-container">
+        <p id="fitness-quote"></p>
+      </div>
+    </div>
+
+    <script>
+      function redirectTo(userType) {
+        if (userType === "admin") {
+          window.location.href = "admin_login.html"; // Replace with the actual path to your admin page
+        } else if (userType === "user") {
+          window.location.href = "user_login.html"; // Replace with the actual path to your user page
+        }
+      }
+
+      // Array of fitness quotes
+      const fitnessQuotes = [
+        "The only bad workout is the one that didn't happen.",
+        "Your body can stand almost anything. It's your mind that you have to convince.",
+        "Don't wish for a good body, work for it.",
+        "The pain you feel today will be the strength you feel tomorrow.",
+        "Strive for progress, not perfection.",
+      ];
+
+      // Display a random fitness quote
+      const quoteContainer = document.getElementById("fitness-quote");
+      const randomQuote =
+        fitnessQuotes[Math.floor(Math.random() * fitnessQuotes.length)];
+      quoteContainer.textContent = randomQuote;
+    </script>
+  </body>
+</html>
