@@ -1,112 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Registration</title>
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background-image: url("photos/isc.jfif"); /* Add the path to your image */
-        background-size: cover;
-        background-position: center;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Registration</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-image: url("photos/isc.jfif"); /* Add the path to your image */
+      background-size: cover;
+      background-position: center;
+    }
+
+    #registration-container {
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 20px;
+      width: 300px;
+      background-color: rgba(255, 255, 255, 0.8); /* Background color with transparency */
+    }
+
+    input {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+      width: 80%;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="registration-container">
+    <h1>User Registration</h1>
+
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <input type="email" id="email" placeholder="Email" />
+    <input type="tel" id="phone" placeholder="Phone Number" />
+    <input type="text" id="roll_number" placeholder="Roll Number" /> <!-- Added Roll Number field -->
+
+    <button onclick="handleRegistrationClick()">Register</button>
+
+    <p id="password-error" style="color: red"></p>
+
+    <p>Already have an account? <a href="user_login.html">Login</a></p>
+  </div>
+
+  <script>
+    function handleRegistrationClick() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+      const rollNumber = document.getElementById("roll_number").value; // Get roll number value
+
+      // Additional validation logic for email, phone number, and roll number can be added here
+
+      if (password.length < 8) {
+        document.getElementById("password-error").textContent =
+          "Password should be at least 8 characters long.";
+        return;
       }
 
-      #registration-container {
-        text-align: center;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 20px;
-        width: 300px;
-        background-color: rgba(
-          255,
-          255,
-          255,
-          0.8
-        ); /* Background color with transparency */
-      }
+      document.getElementById("password-error").textContent = "";
 
-      input {
-        margin: 10px;
-        padding: 10px;
-        font-size: 16px;
-        width: 80%;
-      }
+      fetch("/register_user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password, email, phone, rollNumber }), // Include roll number in the data
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          alert(result.message);
+          if (result.success) {
+            // Registration was successful, so clear the input fields
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("phone").value = "";
+            document.getElementById("roll_number").value = ""; // Clear roll number field as well
 
-      button {
-        margin-top: 10px;
-        padding: 10px 20px;
-        font-size: 18px;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="registration-container">
-      <h1>User Registration</h1>
-
-      <input type="text" id="username" placeholder="Username" />
-      <input type="password" id="password" placeholder="Password" />
-      <input type="email" id="email" placeholder="Email" />
-      <input type="tel" id="phone" placeholder="Phone Number" />
-
-      <button onclick="handleRegistrationClick()">Register</button>
-
-      <p id="password-error" style="color: red"></p>
-
-      <p>Already have an account? <a href="user_login.html">Login</a></p>
-    </div>
-
-    <script>
-      function handleRegistrationClick() {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-        const email = document.getElementById("email").value;
-        const phone = document.getElementById("phone").value;
-
-        // Additional validation logic for email and phone number can be added here
-
-        if (password.length < 8) {
-          document.getElementById("password-error").textContent =
-            "Password should be at least 8 characters long.";
-          return;
-        }
-
-        document.getElementById("password-error").textContent = "";
-
-        fetch("/register_user", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, password, email, phone }),
+            // Redirect to the login page
+            window.location.href = "user_login.html";
+          } else {
+            // Registration failed, so display an error message
+            document.getElementById("password-error").textContent =
+              result.message;
+          }
         })
-          .then((response) => response.json())
-          .then((result) => {
-            alert(result.message);
-            if (result.success) {
-              // Registration was successful, so clear the input fields
-              document.getElementById("username").value = "";
-              document.getElementById("password").value = "";
-              document.getElementById("email").value = "";
-              document.getElementById("phone").value = "";
-
-              // Redirect to the login page
-              window.location.href = "user_login.html";
-            } else {
-              // Registration failed, so display an error message
-              document.getElementById("password-error").textContent =
-                result.message;
-            }
-          })
-          .catch((error) => console.error("Error:", error));
-      }
-    </script>
-  </body>
+        .catch((error) => console.error("Error:", error));
+    }
+  </script>
+</body>
 </html>
